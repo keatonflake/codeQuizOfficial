@@ -1,12 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+    <title>Code Quiz Official</title>
 </head>
+
 <body>
-    
+  
+    <!-- main container -->
+    <div class="container">
+        <div id=question-container" class="hide">
+              
+            <!--Test 75sec Timer-->
+    <div class="timer" id='count'>Start
+    </div>
+            <div id="question">Question</div>
+            <!-- Answer Selections -->
+            <section id="answer-buttons" Class="btn-grid">
+                <button class="btn">Answer 1</button>
+                <button class="btn">Answer 2</button>
+                <button class="btn">Answer 3</button>
+                <button class="btn">Answer 4</button>
+            </section>
+        </div>
+        <!-- Controls -->
+        <div class="controls">
+            <button id="start-btn" class="start-btn btn">Start</button>
+            <button id="next-btn" class="start-btn btn hide">Next</button>
+        </div>
+    </div>
+
+
+    <link href="assets\css\style.css" rel="stylesheet">
+    <script defer src="assets\js\script.js"></script>
 </body>
+
 </html>
