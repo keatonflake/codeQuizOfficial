@@ -1,11 +1,23 @@
 const startButton = document.getElementById('start-btn')
 const nextButton = document.getElementById('next-btn')
+const hiddenscoresheet = document.getElementById('hiddenScoreSheet')
 const questionContainerElement = document.getElementById('question-container')
 const questionElement = document.getElementById('question')
 const answerButtonsElement = document.getElementById('answer-buttons')
+let TIME = 75;
+const inputTextBox = document.getElementById('textBox')
+const submitInitialsButton = document.getElementById('submitInitials')
+const userTextHereSection = document.getElementById('userTextHere')
+let score = 0
+
 
 let shuffledQuestions, currentQuestionIndex
 
+inputTextBox.addEventListener('input', letter => {
+  console.log(letter.target.value)
+  userTextHereSection.textContent = letter.target.value
+})
+ 
 startButton.addEventListener('click', startGame)
 nextButton.addEventListener('click', () => {
   currentQuestionIndex++
@@ -28,15 +40,11 @@ function startGame() {
      }
      if (TIME < 1) {
          window.clearInterval(update);
+          window.alert("time is up!");
+          location.reload();
         }
     }
     update = setInterval("quizTimer()", 1000);
-  
-  // Alert "time is up!"
-  function stopInterval() {
-      console.log('time is up!');
-      clearInterval(timer);
-  }
 
 function setNextQuestion() {
   resetState()
@@ -63,6 +71,7 @@ function resetState() {
   while (answerButtonsElement.firstChild) {
     answerButtonsElement.removeChild(answerButtonsElement.firstChild)
   }
+  score = 0
 }
 
 function selectAnswer(e) {
@@ -77,6 +86,10 @@ function selectAnswer(e) {
   } else {
     startButton.innerText = 'Restart'
     startButton.classList.remove('hide')
+    hiddenscoresheet.classList.remove('hideTillEnd')
+  }
+  if (correct){
+    score += 10
   }
 }
 
@@ -94,41 +107,54 @@ function clearStatusClass(element) {
   element.classList.remove('wrong')
 }
 
+// Local Storage For HighScores
+const localStorageScores = JSON.parse(localStorage.getItem('scores'));
+
+for (let i = 0; i < localStorageScores.length; i++) {
+  const p = document.createElement('p');
+  p.innerHTML = 'initials: ' +  localStorageScores[i].initials + ' score: ' + localStorageScores[i].score;
+  userTextHereSection.append(p);
+}
+
+  // submitInitialsButton.addEventListener('click', function() {
+  //   localStorage.setItem(inputTextBox.innerHTML) = inputTextBox
+  // })
+
 const questions = [
   {
-    question: 'What function is written correctly?',
+    question: 'the condition in an if else statment is closed within...',
     answers: [
-      { text: 'Answer', correct: true },
-      { text: 'Answer', correct: false },
-      { text: 'Answer', correct: false },
-      { text: 'Answer', correct: false }
+      { text: '( )', correct: true },
+      { text: '" "', correct: false },
+      { text: '{ }', correct: false },
+      { text: '< >', correct: false }
     ]
   },
   {
     question: 'what is an Array?',
     answers: [
-      { text: 'Answer', correct: false },
-      { text: 'Answer', correct: false },
-      { text: 'Answer', correct: false },
-      { text: 'Answer', correct: true }
+      { text: 'A type of food', correct: false },
+      { text: 'Slang for "hurray!"', correct: false },
+      { text: 'Mutiple variables that is used to store a single element', correct: false },
+      { text: 'a single variable that is used to store different elements', correct: true },
     ]
   },
   {
-    question: 'best Analogy for how HTML, CSS, JS work together?',
+    question: 'An Element is...',
     answers: [
-      { text: 'Answer', correct: false },
-      { text: 'Answer', correct: true },
-      { text: 'Answer', correct: false },
-      { text: 'Answer', correct: false }
+      { text: 'Element is the most specific class from which certain element objects (i.e. objects that represent elements) in a Document inherit.', correct: false },
+      { text: 'Element is the most general base class from which all element objects (i.e. objects that represent elements) in a Document inherit.', correct: true },
+      { text: 'Boating School? I thought this was spanish class', correct: false },
+      { text: 'Something from Avatar', correct: false },
     ]
   },
   {
-    question: 'What describes an event?',
+    question: 'Which is an example of an event?',
     answers: [
-      { text: 'Answer', correct: false },
-      { text: 'Answer', correct: true },
-      { text: 'Answer', correct: false },
-      { text: 'Answer', correct: false }
+      { text: 'A frat party', correct: false },
+      { text: 'When the user clicks a button', correct: true },
+      { text: 'When the user does not click a button', correct: false },
+      { text: 'Thanksgiving', correct: false },
     ]
   }
 ]
