@@ -5,7 +5,8 @@ const questionContainerElement = document.getElementById('question-container')
 const questionElement = document.getElementById('question')
 const answerButtonsElement = document.getElementById('answer-buttons')
 let TIME = 75;
-const inputTextBox = document.getElementById('textBox')
+// const inputTextBox = document.getElementById('textBox')
+const INPUT = document.getElementById("textBox")
 const submitInitialsButton = document.getElementById('submitInitials')
 const userTextHereSection = document.getElementById('userTextHere')
 let score = 0
@@ -13,7 +14,7 @@ let score = 0
 
 let shuffledQuestions, currentQuestionIndex
 
-inputTextBox.addEventListener('input', letter => {
+INPUT.addEventListener('input', letter => {
   console.log(letter.target.value)
   userTextHereSection.textContent = letter.target.value
 })
@@ -108,13 +109,26 @@ function clearStatusClass(element) {
 }
 
 // Local Storage For HighScores
-const localStorageScores = JSON.parse(localStorage.getItem('scores'));
+submitInitialsButton.addEventListener('click', function() {
+localStorage.setItem('name', INPUT.value);
+console.log("heaven helped")
 
-for (let i = 0; i < localStorageScores.length; i++) {
-  const p = document.createElement('p');
-  p.innerHTML = 'initials: ' +  localStorageScores[i].initials + ' score: ' + localStorageScores[i].score;
-  userTextHereSection.append(p);
+nameDisplayCheck()
+});
+
+function nameDisplayCheck() {
+if (localStorage.getItem('name')) {
+let (name = localStorage.getItem('name'));
+userTextHereSection.textContent = '${name}';
 }
+}
+// const localStorageScores = JSON.parse(localStorage.getItem('scores'));
+
+// for (let i = 0; i < localStorageScores.length; i++) {
+//   const p = document.createElement('p');
+//   p.innerHTML = 'initials: ' +  localStorageScores[i].initials + ' score: ' + localStorageScores[i].score;
+//   userTextHereSection.append(p);
+// }
 
   // submitInitialsButton.addEventListener('click', function() {
   //   localStorage.setItem(inputTextBox.innerHTML) = inputTextBox
