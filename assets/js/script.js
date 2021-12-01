@@ -1,30 +1,29 @@
+// Buttons
+const answerButtonsElement = document.getElementById('answer-buttons')
 const startButton = document.getElementById('start-btn')
 const nextButton = document.getElementById('next-btn')
+const submitInitialsButton = document.getElementById('submitInitials')
+// saving scores and initials
+let INPUT = document.getElementById("textBox");
+const userTextHereSection = document.getElementById('userTextHere')
 const hiddenscoresheet = document.getElementById('hiddenScoreSheet')
+// questions
 const questionContainerElement = document.getElementById('question-container')
 const questionElement = document.getElementById('question')
-const answerButtonsElement = document.getElementById('answer-buttons')
+// timer
 let TIME = 75;
-// const inputTextBox = document.getElementById('textBox')
-const INPUT = document.getElementById("textBox")
-const submitInitialsButton = document.getElementById('submitInitials')
-const userTextHereSection = document.getElementById('userTextHere')
+// score
 let score = 0
-
-
+// questions navigation
 let shuffledQuestions, currentQuestionIndex
 
-INPUT.addEventListener('input', letter => {
-  console.log(letter.target.value)
-  userTextHereSection.textContent = letter.target.value
-})
- 
+// start game
 startButton.addEventListener('click', startGame)
 nextButton.addEventListener('click', () => {
   currentQuestionIndex++
   setNextQuestion()
 })
-
+// hide start game opener and reset time and score
 function startGame() {
   startButton.classList.add('hide')
   shuffledQuestions = questions.sort(() => Math.random() - .5)
@@ -32,34 +31,36 @@ function startGame() {
   questionContainerElement.classList.remove('hide')
   setNextQuestion()
   TIME = 75;
+  score = 0;
 }
- // Timer Function
- function quizTimer() {
-     TIME = TIME -1;
-     if (TIME < 75) {
-         document.getElementById('count').innerHTML = TIME;
-     }
-     if (TIME < 1) {
-         window.clearInterval(update);
-          window.alert("time is up!");
-          location.reload();
-        }
-    }
-    update = setInterval("quizTimer()", 1000);
+// Timer Function
+function quizTimer() {
+  TIME = TIME - 1;
+  if (TIME < 75) {
+    document.getElementById('count').innerHTML = TIME;
+  }
+  if (TIME < 1) {
+    window.clearInterval(update);
+    window.alert("time is up!");
+    location.reload();
+  }
+}
+update = setInterval("quizTimer()", 1000);
 
+// shuffling through questions and adding/removing the correct and wrong clss
 function setNextQuestion() {
   resetState()
   showQuestion(shuffledQuestions[currentQuestionIndex])
 }
-
+// display questions
 function showQuestion(question) {
   questionElement.innerText = question.question
   question.answers.forEach(answer => {
-    const button = document.createElement('button')
-    button.innerText = answer.text
-    button.classList.add('btn')
+    const button = document.createElement('button');
+    button.innerText = answer.text;
+    button.classList.add('btn');
     if (answer.correct) {
-      button.dataset.correct = answer.correct
+      button.dataset.correct = answer.correct;
     }
     button.addEventListener('click', selectAnswer)
     answerButtonsElement.appendChild(button)
@@ -72,12 +73,15 @@ function resetState() {
   while (answerButtonsElement.firstChild) {
     answerButtonsElement.removeChild(answerButtonsElement.firstChild)
   }
-  score = 0
 }
 
+// answering questions and adding a score
 function selectAnswer(e) {
   const selectedButton = e.target
   const correct = selectedButton.dataset.correct
+  if (correct) {
+    score += 10
+  }
   setStatusClass(document.body, correct)
   Array.from(answerButtonsElement.children).forEach(button => {
     setStatusClass(button, button.dataset.correct)
@@ -89,11 +93,9 @@ function selectAnswer(e) {
     startButton.classList.remove('hide')
     hiddenscoresheet.classList.remove('hideTillEnd')
   }
-  if (correct){
-    score += 10
-  }
-}
 
+}
+//colors attached to correct and wrong class
 function setStatusClass(element, correct) {
   clearStatusClass(element)
   if (correct) {
@@ -107,32 +109,32 @@ function clearStatusClass(element) {
   element.classList.remove('correct')
   element.classList.remove('wrong')
 }
+// user and highscore data
 
 // Local Storage For HighScores
-submitInitialsButton.addEventListener('click', function() {
-localStorage.setItem('name', INPUT.value);
-console.log("heaven helped")
+submitInitialsButton.addEventListener('click', function () {
 
-nameDisplayCheck()
+  const data = {
+    name: INPUT.value,
+    score: score
+  }
+
+  let userData = JSON.parse(localStorage.getItem('highscores'));
+
+  if (userData === null) {
+    userData = []
+  }
+
+  userData.push(data)
+  localStorage.setItem('highscores', JSON.stringify(userData))
+
+  for (let i = 0; i < userData.length; i++) {
+    const addingInfo = document.createElement('p')
+    addingInfo.innerHTML = "NAME: " + userData[i].name + " SCORE: " + userData[i].score;
+    userTextHereSection.append(addingInfo)
+  }
+
 });
-
-function nameDisplayCheck() {
-if (localStorage.getItem('name')) {
-let (name = localStorage.getItem('name'));
-userTextHereSection.textContent = '${name}';
-}
-}
-// const localStorageScores = JSON.parse(localStorage.getItem('scores'));
-
-// for (let i = 0; i < localStorageScores.length; i++) {
-//   const p = document.createElement('p');
-//   p.innerHTML = 'initials: ' +  localStorageScores[i].initials + ' score: ' + localStorageScores[i].score;
-//   userTextHereSection.append(p);
-// }
-
-  // submitInitialsButton.addEventListener('click', function() {
-  //   localStorage.setItem(inputTextBox.innerHTML) = inputTextBox
-  // })
 
 const questions = [
   {
@@ -172,4 +174,3 @@ const questions = [
     ]
   }
 ]
-  
